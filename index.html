@@ -1,0 +1,2073 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pranav Rohan Tejomurtula — Aerospace Engineering</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Rajdhani:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    /* =============================================
+       CSS CUSTOM PROPERTIES — AEROSPACE THEME
+    ============================================= */
+    :root {
+      --bg-void: #030609;
+      --bg-deep: #060d18;
+      --bg-panel: #0a1628;
+      --bg-card: #0d1f38;
+      --bg-glass: rgba(13, 31, 56, 0.6);
+      --accent-primary: #00d4ff;
+      --accent-secondary: #0066ff;
+      --accent-glow: #00aaff;
+      --accent-warm: #ff6b35;
+      --accent-green: #00ff88;
+      --text-primary: #e8f4fd;
+      --text-secondary: #7fb3d3;
+      --text-muted: #3d6b8c;
+      --border-subtle: rgba(0, 212, 255, 0.12);
+      --border-glow: rgba(0, 212, 255, 0.4);
+      --font-display: 'Orbitron', monospace;
+      --font-body: 'Rajdhani', sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+    }
+
+    /* =============================================
+       RESET & BASE
+    ============================================= */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: var(--font-body);
+      background: var(--bg-void);
+      color: var(--text-primary);
+      overflow-x: hidden;
+      font-size: 16px;
+      line-height: 1.6;
+    }
+    a { color: var(--accent-primary); text-decoration: none; }
+    a:hover { color: var(--accent-glow); }
+    ::selection { background: rgba(0, 212, 255, 0.3); }
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--bg-deep); }
+    ::-webkit-scrollbar-thumb { background: var(--accent-secondary); border-radius: 3px; }
+
+    /* =============================================
+       STAR CANVAS + GRID OVERLAY
+    ============================================= */
+    #star-canvas {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      z-index: 0;
+      pointer-events: none;
+    }
+    .grid-overlay {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      z-index: 0;
+      pointer-events: none;
+      background-image:
+        linear-gradient(rgba(0, 212, 255, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 212, 255, 0.03) 1px, transparent 1px);
+      background-size: 60px 60px;
+    }
+
+    /* =============================================
+       NAV
+    ============================================= */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 1000;
+      padding: 18px 48px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      backdrop-filter: blur(20px);
+      background: rgba(3, 6, 9, 0.85);
+      border-bottom: 1px solid var(--border-subtle);
+      transition: all 0.3s ease;
+    }
+    .nav-logo {
+      font-family: var(--font-display);
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 3px;
+      color: var(--accent-primary);
+      text-transform: uppercase;
+    }
+    .nav-logo span {
+      color: var(--text-muted);
+      font-weight: 400;
+    }
+    .nav-links {
+      display: flex;
+      gap: 32px;
+      list-style: none;
+    }
+    .nav-links a {
+      font-family: var(--font-display);
+      font-size: 11px;
+      letter-spacing: 2px;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      transition: color 0.3s;
+      position: relative;
+    }
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -4px; left: 0; right: 0;
+      height: 1px;
+      background: var(--accent-primary);
+      transform: scaleX(0);
+      transition: transform 0.3s;
+    }
+    .nav-links a:hover { color: var(--accent-primary); }
+    .nav-links a:hover::after { transform: scaleX(1); }
+    .nav-cta {
+      font-family: var(--font-display);
+      font-size: 11px;
+      letter-spacing: 2px;
+      padding: 8px 20px;
+      border: 1px solid var(--accent-primary);
+      color: var(--accent-primary);
+      text-transform: uppercase;
+      transition: all 0.3s;
+      cursor: pointer;
+      background: transparent;
+    }
+    .nav-cta:hover {
+      background: var(--accent-primary);
+      color: var(--bg-void);
+    }
+    .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; }
+    .hamburger span { width: 24px; height: 2px; background: var(--accent-primary); transition: all 0.3s; }
+
+    /* =============================================
+       HERO SECTION
+    ============================================= */
+    #hero {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      z-index: 1;
+      padding: 120px 24px 60px;
+      overflow: hidden;
+    }
+    .hero-bg-effects {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+    }
+    .orbit-ring {
+      position: absolute;
+      border-radius: 50%;
+      border: 1px solid rgba(0, 212, 255, 0.08);
+      animation: orbit-spin linear infinite;
+    }
+    .orbit-ring:nth-child(1) { width: 600px; height: 600px; top: 50%; left: 50%; transform: translate(-50%,-50%); animation-duration: 30s; }
+    .orbit-ring:nth-child(2) { width: 900px; height: 900px; top: 50%; left: 50%; transform: translate(-50%,-50%); animation-duration: 50s; animation-direction: reverse; }
+    .orbit-ring:nth-child(3) { width: 1200px; height: 1200px; top: 50%; left: 50%; transform: translate(-50%,-50%); animation-duration: 80s; }
+    .orbit-dot {
+      position: absolute;
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--accent-primary);
+      box-shadow: 0 0 12px var(--accent-primary);
+    }
+    .orbit-ring:nth-child(1) .orbit-dot { top: -3px; left: 50%; transform: translateX(-50%); }
+    .orbit-ring:nth-child(2) .orbit-dot { top: 50%; right: -3px; transform: translateY(-50%); }
+    .orbit-ring:nth-child(3) .orbit-dot { bottom: -3px; left: 30%; }
+    @keyframes orbit-spin {
+      from { transform: translate(-50%,-50%) rotate(0deg); }
+      to { transform: translate(-50%,-50%) rotate(360deg); }
+    }
+    .glow-orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(80px);
+      pointer-events: none;
+      opacity: 0.15;
+    }
+    .glow-orb-1 { width: 400px; height: 400px; background: var(--accent-secondary); top: 20%; left: 10%; }
+    .glow-orb-2 { width: 300px; height: 300px; background: var(--accent-primary); top: 60%; right: 10%; }
+    .hero-content { position: relative; z-index: 2; max-width: 900px; }
+    .hero-tag {
+      font-family: var(--font-display);
+      font-size: 11px;
+      letter-spacing: 4px;
+      color: var(--accent-primary);
+      text-transform: uppercase;
+      margin-bottom: 24px;
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      opacity: 0;
+      animation: fadeInUp 0.8s ease 0.2s forwards;
+    }
+    .hero-tag::before, .hero-tag::after {
+      content: '';
+      width: 40px; height: 1px;
+      background: var(--accent-primary);
+    }
+    .hero-name {
+      font-family: var(--font-display);
+      font-size: clamp(36px, 6vw, 80px);
+      font-weight: 900;
+      line-height: 1;
+      letter-spacing: -1px;
+      color: var(--text-primary);
+      margin-bottom: 8px;
+      opacity: 0;
+      animation: fadeInUp 0.8s ease 0.4s forwards;
+    }
+    .hero-name .highlight {
+      color: transparent;
+      -webkit-text-stroke: 1px var(--accent-primary);
+    }
+    .hero-title {
+      font-family: var(--font-display);
+      font-size: clamp(14px, 2vw, 20px);
+      font-weight: 400;
+      letter-spacing: 6px;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      margin-bottom: 32px;
+      opacity: 0;
+      animation: fadeInUp 0.8s ease 0.6s forwards;
+    }
+    .hero-tagline {
+      font-size: 18px;
+      font-weight: 300;
+      color: var(--text-secondary);
+      max-width: 520px;
+      margin: 0 auto 16px;
+      opacity: 0;
+      animation: fadeInUp 0.8s ease 0.7s forwards;
+    }
+    .hero-sub {
+      font-family: var(--font-mono);
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-bottom: 48px;
+      opacity: 0;
+      animation: fadeInUp 0.8s ease 0.8s forwards;
+    }
+    .hero-sub span { color: var(--accent-green); }
+    .hero-buttons {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      flex-wrap: wrap;
+      opacity: 0;
+      animation: fadeInUp 0.8s ease 1s forwards;
+    }
+    .btn-primary {
+      font-family: var(--font-display);
+      font-size: 12px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      padding: 14px 36px;
+      background: var(--accent-primary);
+      color: var(--bg-void);
+      border: none;
+      cursor: pointer;
+      transition: all 0.3s;
+      clip-path: polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%);
+    }
+    .btn-primary:hover {
+      background: var(--accent-glow);
+      box-shadow: 0 0 30px rgba(0, 212, 255, 0.5);
+      transform: translateY(-2px);
+    }
+    .btn-outline {
+      font-family: var(--font-display);
+      font-size: 12px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      padding: 14px 36px;
+      background: transparent;
+      color: var(--accent-primary);
+      border: 1px solid var(--accent-primary);
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    .btn-outline:hover {
+      background: rgba(0, 212, 255, 0.1);
+      box-shadow: 0 0 20px rgba(0, 212, 255, 0.2);
+      transform: translateY(-2px);
+    }
+    .hero-scroll {
+      position: absolute;
+      bottom: 40px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      opacity: 0;
+      animation: fadeInUp 0.8s ease 1.5s forwards;
+    }
+    .scroll-line {
+      width: 1px; height: 50px;
+      background: linear-gradient(to bottom, transparent, var(--accent-primary));
+      animation: scroll-pulse 2s ease-in-out infinite;
+    }
+    .scroll-label {
+      font-family: var(--font-display);
+      font-size: 9px;
+      letter-spacing: 3px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      writing-mode: vertical-rl;
+    }
+    @keyframes scroll-pulse {
+      0%, 100% { opacity: 0.3; transform: scaleY(0.8); }
+      50% { opacity: 1; transform: scaleY(1); }
+    }
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* =============================================
+       SECTION STYLES
+    ============================================= */
+    section {
+      position: relative;
+      z-index: 1;
+      padding: 100px 48px;
+    }
+    .section-inner { max-width: 1200px; margin: 0 auto; }
+    .section-label {
+      font-family: var(--font-display);
+      font-size: 10px;
+      letter-spacing: 5px;
+      color: var(--accent-primary);
+      text-transform: uppercase;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .section-label::before {
+      content: '';
+      width: 24px; height: 1px;
+      background: var(--accent-primary);
+    }
+    .section-title {
+      font-family: var(--font-display);
+      font-size: clamp(28px, 4vw, 48px);
+      font-weight: 700;
+      letter-spacing: -1px;
+      color: var(--text-primary);
+      margin-bottom: 60px;
+      line-height: 1.1;
+    }
+    .section-title .dim { color: var(--text-muted); }
+
+    /* =============================================
+       ABOUT SECTION
+    ============================================= */
+    #about { background: linear-gradient(180deg, var(--bg-void) 0%, var(--bg-deep) 100%); }
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: start;
+    }
+    .about-text p {
+      font-size: 17px;
+      font-weight: 400;
+      color: var(--text-secondary);
+      line-height: 1.8;
+      margin-bottom: 20px;
+    }
+    .about-text p strong { color: var(--accent-primary); font-weight: 600; }
+    .stat-row {
+      display: flex;
+      gap: 32px;
+      margin-top: 36px;
+      flex-wrap: wrap;
+    }
+    .stat-item { text-align: center; }
+    .stat-num {
+      font-family: var(--font-display);
+      font-size: 32px;
+      font-weight: 900;
+      color: var(--accent-primary);
+      line-height: 1;
+    }
+    .stat-label {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--text-muted);
+      letter-spacing: 1px;
+      margin-top: 4px;
+    }
+    .about-skills h3 {
+      font-family: var(--font-display);
+      font-size: 13px;
+      letter-spacing: 3px;
+      color: var(--accent-primary);
+      text-transform: uppercase;
+      margin-bottom: 24px;
+    }
+    .skill-categories { display: flex; flex-direction: column; gap: 24px; }
+    .skill-category-title {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--text-muted);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+    .skill-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+    .chip {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      padding: 5px 14px;
+      border: 1px solid var(--border-subtle);
+      color: var(--text-secondary);
+      background: rgba(0, 212, 255, 0.04);
+      transition: all 0.3s;
+    }
+    .chip:hover {
+      border-color: var(--accent-primary);
+      color: var(--accent-primary);
+      background: rgba(0, 212, 255, 0.08);
+    }
+
+    /* =============================================
+       PROJECTS SECTION
+    ============================================= */
+    #projects { background: var(--bg-void); }
+    .filter-bar {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 48px;
+    }
+    .filter-btn {
+      font-family: var(--font-display);
+      font-size: 10px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      padding: 8px 20px;
+      background: transparent;
+      color: var(--text-muted);
+      border: 1px solid var(--border-subtle);
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    .filter-btn.active, .filter-btn:hover {
+      color: var(--accent-primary);
+      border-color: var(--accent-primary);
+      background: rgba(0, 212, 255, 0.06);
+    }
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+      gap: 24px;
+    }
+    .project-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      overflow: hidden;
+      cursor: pointer;
+      transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+      position: relative;
+    }
+    .project-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--accent-primary), transparent);
+      transform: scaleX(0);
+      transition: transform 0.4s;
+    }
+    .project-card:hover {
+      border-color: var(--border-glow);
+      transform: translateY(-6px);
+      box-shadow: 0 20px 60px rgba(0, 212, 255, 0.1);
+    }
+    .project-card:hover::before { transform: scaleX(1); }
+    .project-card.hidden { display: none; }
+    .card-visual {
+      width: 100%; height: 200px;
+      overflow: hidden;
+      position: relative;
+      background: var(--bg-panel);
+    }
+    .card-visual-inner {
+      width: 100%; height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .card-body { padding: 24px; }
+    .card-tag {
+      font-family: var(--font-display);
+      font-size: 9px;
+      letter-spacing: 3px;
+      color: var(--accent-primary);
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+    .card-title {
+      font-family: var(--font-display);
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 12px;
+      line-height: 1.3;
+    }
+    .card-desc {
+      font-size: 14px;
+      color: var(--text-secondary);
+      line-height: 1.6;
+      margin-bottom: 20px;
+    }
+    .card-tech { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 20px; }
+    .tech-tag {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      padding: 3px 10px;
+      background: rgba(0, 102, 255, 0.15);
+      color: var(--accent-secondary);
+      border: 1px solid rgba(0, 102, 255, 0.3);
+    }
+    .card-cta {
+      font-family: var(--font-display);
+      font-size: 10px;
+      letter-spacing: 2px;
+      color: var(--accent-primary);
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+    }
+    .card-cta .arrow { transition: transform 0.3s; }
+    .project-card:hover .card-cta .arrow { transform: translateX(4px); }
+
+    /* =============================================
+       PROJECT MODAL
+    ============================================= */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(3, 6, 9, 0.92);
+      z-index: 2000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s;
+      backdrop-filter: blur(10px);
+    }
+    .modal-overlay.open { opacity: 1; pointer-events: all; }
+    .modal {
+      background: var(--bg-card);
+      border: 1px solid var(--border-glow);
+      max-width: 800px;
+      width: 100%;
+      max-height: 90vh;
+      overflow-y: auto;
+      transform: scale(0.9);
+      transition: transform 0.3s;
+      position: relative;
+    }
+    .modal-overlay.open .modal { transform: scale(1); }
+    .modal-header {
+      padding: 32px;
+      border-bottom: 1px solid var(--border-subtle);
+      position: sticky; top: 0;
+      background: var(--bg-card);
+      z-index: 1;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+    }
+    .modal-tag {
+      font-family: var(--font-display);
+      font-size: 9px;
+      letter-spacing: 3px;
+      color: var(--accent-primary);
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+    .modal-title {
+      font-family: var(--font-display);
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+    .modal-close {
+      width: 36px; height: 36px;
+      border: 1px solid var(--border-subtle);
+      background: transparent;
+      color: var(--text-muted);
+      cursor: pointer;
+      font-size: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s;
+      flex-shrink: 0;
+    }
+    .modal-close:hover { border-color: var(--accent-primary); color: var(--accent-primary); }
+    .modal-body { padding: 32px; }
+    .modal-section { margin-bottom: 32px; }
+    .modal-section h4 {
+      font-family: var(--font-display);
+      font-size: 11px;
+      letter-spacing: 3px;
+      color: var(--accent-primary);
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+    .modal-section p {
+      font-size: 15px;
+      color: var(--text-secondary);
+      line-height: 1.7;
+    }
+    .modal-section ul { list-style: none; }
+    .modal-section ul li {
+      font-size: 15px;
+      color: var(--text-secondary);
+      padding: 6px 0;
+      padding-left: 20px;
+      position: relative;
+      line-height: 1.6;
+    }
+    .modal-section ul li::before {
+      content: '›';
+      position: absolute;
+      left: 0;
+      color: var(--accent-primary);
+    }
+
+    /* =============================================
+       SKILLS SECTION
+    ============================================= */
+    #skills { background: linear-gradient(180deg, var(--bg-void) 0%, var(--bg-deep) 100%); }
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 24px;
+    }
+    .skill-block {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      padding: 28px;
+      transition: border-color 0.3s;
+    }
+    .skill-block:hover { border-color: var(--border-glow); }
+    .skill-block-icon { font-size: 28px; margin-bottom: 12px; }
+    .skill-block-title {
+      font-family: var(--font-display);
+      font-size: 13px;
+      letter-spacing: 2px;
+      color: var(--accent-primary);
+      text-transform: uppercase;
+      margin-bottom: 20px;
+    }
+    .skill-bar-item { margin-bottom: 14px; }
+    .skill-bar-header {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 6px;
+    }
+    .skill-bar-name { font-size: 13px; color: var(--text-secondary); font-family: var(--font-mono); }
+    .skill-bar-pct { font-size: 11px; color: var(--text-muted); font-family: var(--font-mono); }
+    .skill-bar-track {
+      height: 3px;
+      background: var(--bg-panel);
+      position: relative;
+      overflow: hidden;
+    }
+    .skill-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--accent-secondary), var(--accent-primary));
+      width: 0%;
+      transition: width 1.2s cubic-bezier(0.25, 0.8, 0.25, 1);
+      box-shadow: 0 0 10px rgba(0, 212, 255, 0.5);
+    }
+
+    /* =============================================
+       EXPERIENCE / TIMELINE
+    ============================================= */
+    #experience { background: var(--bg-void); }
+    .timeline { position: relative; padding-left: 32px; }
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 8px; top: 0; bottom: 0;
+      width: 1px;
+      background: linear-gradient(to bottom, var(--accent-primary), transparent);
+    }
+    .timeline-item {
+      position: relative;
+      margin-bottom: 52px;
+      opacity: 0;
+      transform: translateX(-20px);
+      transition: all 0.6s ease;
+    }
+    .timeline-item.visible { opacity: 1; transform: translateX(0); }
+    .timeline-dot {
+      position: absolute;
+      left: -28px;
+      top: 6px;
+      width: 12px; height: 12px;
+      border-radius: 50%;
+      background: var(--accent-primary);
+      box-shadow: 0 0 16px var(--accent-primary);
+    }
+    .timeline-date {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--accent-primary);
+      letter-spacing: 2px;
+      margin-bottom: 8px;
+    }
+    .timeline-role {
+      font-family: var(--font-display);
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 4px;
+    }
+    .timeline-org {
+      font-size: 14px;
+      color: var(--text-secondary);
+      margin-bottom: 16px;
+    }
+    .timeline-org span { color: var(--accent-primary); }
+    .timeline-points { list-style: none; }
+    .timeline-points li {
+      font-size: 14px;
+      color: var(--text-secondary);
+      padding: 5px 0;
+      padding-left: 18px;
+      position: relative;
+      line-height: 1.6;
+    }
+    .timeline-points li::before {
+      content: '▸';
+      position: absolute;
+      left: 0;
+      color: var(--accent-primary);
+      font-size: 10px;
+      top: 7px;
+    }
+
+    /* =============================================
+       INTERACTIVE ORBIT VISUALIZER
+    ============================================= */
+    #visualizer { background: var(--bg-deep); }
+    .viz-container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 48px;
+      align-items: center;
+    }
+    .viz-info h3 {
+      font-family: var(--font-display);
+      font-size: 20px;
+      color: var(--text-primary);
+      margin-bottom: 16px;
+    }
+    .viz-info p {
+      font-size: 15px;
+      color: var(--text-secondary);
+      line-height: 1.7;
+      margin-bottom: 24px;
+    }
+    .viz-controls { display: flex; flex-direction: column; gap: 16px; }
+    .viz-control label {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--text-muted);
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      display: block;
+      margin-bottom: 6px;
+    }
+    .viz-control input[type=range] {
+      width: 100%;
+      -webkit-appearance: none;
+      height: 2px;
+      background: var(--bg-panel);
+      outline: none;
+    }
+    .viz-control input[type=range]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 14px; height: 14px;
+      border-radius: 50%;
+      background: var(--accent-primary);
+      cursor: pointer;
+      box-shadow: 0 0 8px var(--accent-primary);
+    }
+    .viz-value {
+      font-family: var(--font-mono);
+      font-size: 13px;
+      color: var(--accent-primary);
+      text-align: right;
+      margin-top: 4px;
+    }
+    #orbit-canvas {
+      width: 100%;
+      height: 400px;
+      border: 1px solid var(--border-subtle);
+      background: var(--bg-void);
+    }
+
+    /* =============================================
+       RESUME SECTION
+    ============================================= */
+    #resume {
+      background: linear-gradient(135deg, var(--bg-deep) 0%, var(--bg-void) 100%);
+      text-align: center;
+    }
+    .resume-card {
+      max-width: 600px;
+      margin: 0 auto;
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      padding: 60px;
+      position: relative;
+      overflow: hidden;
+    }
+    .resume-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--accent-secondary), var(--accent-primary));
+    }
+    .resume-icon { font-size: 48px; margin-bottom: 24px; }
+    .resume-card h3 {
+      font-family: var(--font-display);
+      font-size: 20px;
+      color: var(--text-primary);
+      margin-bottom: 12px;
+    }
+    .resume-card p { font-size: 15px; color: var(--text-secondary); margin-bottom: 36px; }
+
+    /* =============================================
+       CONTACT SECTION
+    ============================================= */
+    #contact { background: var(--bg-void); }
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+    }
+    .contact-info h3 {
+      font-family: var(--font-display);
+      font-size: 18px;
+      color: var(--text-primary);
+      margin-bottom: 16px;
+    }
+    .contact-info p { font-size: 15px; color: var(--text-secondary); line-height: 1.7; margin-bottom: 36px; }
+    .contact-links { display: flex; flex-direction: column; gap: 16px; }
+    .contact-link {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 16px 20px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      text-decoration: none;
+      transition: all 0.3s;
+    }
+    .contact-link:hover {
+      border-color: var(--accent-primary);
+      background: rgba(0, 212, 255, 0.05);
+    }
+    .contact-link-icon { font-size: 20px; }
+    .contact-link-text { flex: 1; }
+    .contact-link-label {
+      font-family: var(--font-display);
+      font-size: 10px;
+      letter-spacing: 2px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+    }
+    .contact-link-value { font-size: 14px; color: var(--text-primary); font-family: var(--font-mono); }
+    .contact-form { display: flex; flex-direction: column; gap: 16px; }
+    .form-group { display: flex; flex-direction: column; gap: 6px; }
+    .form-group label {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--text-muted);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+    .form-group input, .form-group textarea {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-primary);
+      font-family: var(--font-body);
+      font-size: 15px;
+      padding: 14px 16px;
+      outline: none;
+      transition: border-color 0.3s;
+      resize: vertical;
+    }
+    .form-group input:focus, .form-group textarea:focus { border-color: var(--accent-primary); }
+    .form-submit {
+      font-family: var(--font-display);
+      font-size: 12px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      padding: 16px 32px;
+      background: var(--accent-primary);
+      color: var(--bg-void);
+      border: none;
+      cursor: pointer;
+      transition: all 0.3s;
+      align-self: flex-start;
+      clip-path: polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%);
+    }
+    .form-submit:hover {
+      background: var(--accent-glow);
+      box-shadow: 0 0 30px rgba(0, 212, 255, 0.4);
+    }
+    .form-success {
+      font-family: var(--font-mono);
+      font-size: 13px;
+      color: var(--accent-green);
+      padding: 12px 16px;
+      background: rgba(0, 255, 136, 0.05);
+      border: 1px solid rgba(0, 255, 136, 0.2);
+      display: none;
+    }
+
+    /* =============================================
+       FOOTER
+    ============================================= */
+    footer {
+      position: relative;
+      z-index: 1;
+      padding: 32px 48px;
+      border-top: 1px solid var(--border-subtle);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+    .footer-logo {
+      font-family: var(--font-display);
+      font-size: 12px;
+      letter-spacing: 3px;
+      color: var(--text-muted);
+    }
+    .footer-copy {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+    .footer-copy span { color: var(--accent-primary); }
+
+    /* =============================================
+       ANIMATIONS / SCROLL REVEAL
+    ============================================= */
+    .reveal {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+    .reveal-delay-1 { transition-delay: 0.1s; }
+    .reveal-delay-2 { transition-delay: 0.2s; }
+    .reveal-delay-3 { transition-delay: 0.3s; }
+
+    /* =============================================
+       RESPONSIVE
+    ============================================= */
+    @media (max-width: 900px) {
+      nav { padding: 16px 24px; }
+      .nav-links, .nav-cta { display: none; }
+      .hamburger { display: flex; }
+      section { padding: 80px 24px; }
+      .about-grid, .contact-grid, .viz-container { grid-template-columns: 1fr; gap: 48px; }
+      #orbit-canvas { height: 300px; }
+      footer { padding: 24px; }
+    }
+    @media (max-width: 600px) {
+      .projects-grid { grid-template-columns: 1fr; }
+      .hero-buttons { flex-direction: column; align-items: center; }
+      .resume-card { padding: 36px 24px; }
+    }
+
+    /* =============================================
+       SVG PROJECT VISUALS
+    ============================================= */
+    .project-svg { width: 100%; height: 200px; }
+    .svg-grid line { stroke: rgba(0,212,255,0.08); stroke-width: 0.5; }
+    .svg-grid-label { font-family: 'JetBrains Mono', monospace; font-size: 7px; fill: rgba(0,212,255,0.25); }
+
+    /* Tooltip */
+    .tooltip {
+      position: absolute;
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      padding: 8px 14px;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--text-secondary);
+      pointer-events: none;
+      z-index: 10;
+      white-space: nowrap;
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+  </style>
+</head>
+<body>
+
+<!-- STAR CANVAS -->
+<canvas id="star-canvas"></canvas>
+<div class="grid-overlay"></div>
+
+<!-- NAVIGATION -->
+<nav id="navbar">
+  <div class="nav-logo">PRT<span> / AEROSPACE</span></div>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#experience">Experience</a></li>
+    <li><a href="#visualizer">Simulation</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <button class="nav-cta btn-outline" onclick="document.getElementById('resume').scrollIntoView({behavior:'smooth'})">Resume</button>
+  <div class="hamburger" onclick="toggleMobileMenu()">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+
+<!-- ===================== HERO ===================== -->
+<section id="hero">
+  <div class="hero-bg-effects">
+    <div class="orbit-ring"><div class="orbit-dot"></div></div>
+    <div class="orbit-ring"><div class="orbit-dot"></div></div>
+    <div class="orbit-ring"><div class="orbit-dot"></div></div>
+    <div class="glow-orb glow-orb-1"></div>
+    <div class="glow-orb glow-orb-2"></div>
+  </div>
+  <div class="hero-content">
+    <div class="hero-tag">UT Austin · Aerospace Engineering · Class of 2027</div>
+    <h1 class="hero-name">Pranav Rohan<br><span class="highlight">Tejomurtula</span></h1>
+    <div class="hero-title">Aerospace Engineering Student</div>
+    <p class="hero-tagline">Designing the future of flight, hypersonics, and space systems — one simulation at a time.</p>
+    <div class="hero-sub">
+      <span>$</span> skills = [UAV_Propulsion, FEA_Analysis, Hypersonics, CFD, PCB_Design]
+    </div>
+    <div class="hero-buttons">
+      <button class="btn-primary" onclick="document.getElementById('projects').scrollIntoView({behavior:'smooth'})">View Projects</button>
+      <a class="btn-outline" href="PranavRohanTejomurtulaResume.docx" download>Download Resume</a>
+    </div>
+  </div>
+  <div class="hero-scroll">
+    <div class="scroll-line"></div>
+    <span class="scroll-label">scroll</span>
+  </div>
+</section>
+
+<!-- ===================== ABOUT ===================== -->
+<section id="about">
+  <div class="section-inner">
+    <div class="section-label">01 — Profile</div>
+    <h2 class="section-title">Engineering at the<br><span class="dim">Edge of What's Possible</span></h2>
+    <div class="about-grid">
+      <div class="about-text reveal">
+        <p>I'm a <strong>junior Aerospace Engineering student</strong> at The University of Texas at Austin, graduating May 2027. I work at the intersection of structural analysis, aerodynamics, propulsion, and embedded systems.</p>
+        <p>My project experience spans <strong>hypersonic wind tunnel testing</strong>, UAV flight performance optimization, Hyperloop frame FEA, and PCB design for thrust vector control — giving me a uniquely broad engineering perspective.</p>
+        <p>I'm passionate about <strong>advancing aerospace systems</strong> through rigorous analysis, creative design, and cutting-edge experimental methods. I thrive in collaborative, high-stakes engineering environments.</p>
+        <div class="stat-row">
+          <div class="stat-item"><div class="stat-num">7+</div><div class="stat-label">Projects</div></div>
+          <div class="stat-item"><div class="stat-num">Mach 7.2</div><div class="stat-label">Testing Speed</div></div>
+          <div class="stat-item"><div class="stat-num">2+</div><div class="stat-label">Hrs Flight Data</div></div>
+          <div class="stat-item"><div class="stat-num">2027</div><div class="stat-label">Graduation</div></div>
+        </div>
+      </div>
+      <div class="about-skills reveal reveal-delay-2">
+        <h3>Technical Arsenal</h3>
+        <div class="skill-categories">
+          <div>
+            <div class="skill-category-title">// Programming & Analysis</div>
+            <div class="skill-chips">
+              <span class="chip">MATLAB</span>
+              <span class="chip">Python</span>
+              <span class="chip">LabVIEW</span>
+              <span class="chip">ImageJ</span>
+              <span class="chip">Excel VBA</span>
+            </div>
+          </div>
+          <div>
+            <div class="skill-category-title">// Design & Simulation</div>
+            <div class="skill-chips">
+              <span class="chip">SolidWorks CAD</span>
+              <span class="chip">SolidWorks FEA</span>
+              <span class="chip">CFD</span>
+              <span class="chip">Eagle PCB</span>
+              <span class="chip">Mission Planner</span>
+              <span class="chip">ArduPilot</span>
+              <span class="chip">MotoCalc</span>
+            </div>
+          </div>
+          <div>
+            <div class="skill-category-title">// Laboratory & Hardware</div>
+            <div class="skill-chips">
+              <span class="chip">Wind Tunnel</span>
+              <span class="chip">Schlieren Imaging</span>
+              <span class="chip">Class 4 Laser</span>
+              <span class="chip">3D Printing (PLA/SLA)</span>
+              <span class="chip">Drill Press</span>
+              <span class="chip">Optical Systems</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== PROJECTS ===================== -->
+<section id="projects">
+  <div class="section-inner">
+    <div class="section-label">02 — Work</div>
+    <h2 class="section-title">Engineering<br><span class="dim">Projects & Research</span></h2>
+    <div class="filter-bar" id="filter-bar">
+      <button class="filter-btn active" data-filter="all">All Projects</button>
+      <button class="filter-btn" data-filter="structures">Structures / FEA</button>
+      <button class="filter-btn" data-filter="aero">Aerodynamics</button>
+      <button class="filter-btn" data-filter="propulsion">Propulsion / UAV</button>
+      <button class="filter-btn" data-filter="experimental">Experimental</button>
+      <button class="filter-btn" data-filter="electronics">Electronics</button>
+    </div>
+    <div class="projects-grid" id="projects-grid">
+      <!-- Cards injected by JS -->
+    </div>
+  </div>
+</section>
+
+<!-- PROJECT MODAL -->
+<div class="modal-overlay" id="modal-overlay" onclick="closeModal(event)">
+  <div class="modal" id="modal">
+    <div class="modal-header">
+      <div>
+        <div class="modal-tag" id="modal-tag"></div>
+        <div class="modal-title" id="modal-title"></div>
+      </div>
+      <button class="modal-close" onclick="closeModalDirect()">✕</button>
+    </div>
+    <div class="modal-body" id="modal-body"></div>
+  </div>
+</div>
+
+<!-- ===================== SKILLS ===================== -->
+<section id="skills">
+  <div class="section-inner">
+    <div class="section-label">03 — Proficiency</div>
+    <h2 class="section-title reveal">Technical<br><span class="dim">Skills Matrix</span></h2>
+    <div class="skills-grid" id="skills-grid">
+      <!-- Injected by JS -->
+    </div>
+  </div>
+</section>
+
+<!-- ===================== EXPERIENCE ===================== -->
+<section id="experience">
+  <div class="section-inner">
+    <div class="section-label">04 — Timeline</div>
+    <h2 class="section-title">Experience &<br><span class="dim">Involvement</span></h2>
+    <div class="timeline" id="timeline">
+      <!-- Injected by JS -->
+    </div>
+  </div>
+</section>
+
+<!-- ===================== ORBIT VISUALIZER ===================== -->
+<section id="visualizer">
+  <div class="section-inner">
+    <div class="section-label">05 — Interactive</div>
+    <h2 class="section-title">Orbital Mechanics<br><span class="dim">Simulation</span></h2>
+    <div class="viz-container">
+      <div class="viz-info reveal">
+        <h3>Kepler Orbit Simulator</h3>
+        <p>This interactive tool models satellite orbital mechanics using Kepler's laws. Adjust orbital parameters to visualize how eccentricity, inclination, and altitude affect orbit shape — a core concept in spacecraft mission design.</p>
+        <div class="viz-controls">
+          <div class="viz-control">
+            <label>Orbital Eccentricity</label>
+            <input type="range" id="ecc-slider" min="0" max="0.9" step="0.01" value="0.3" oninput="updateOrbit()">
+            <div class="viz-value" id="ecc-val">0.30</div>
+          </div>
+          <div class="viz-control">
+            <label>Semi-Major Axis (km)</label>
+            <input type="range" id="sma-slider" min="6800" max="42000" step="100" value="10000" oninput="updateOrbit()">
+            <div class="viz-value" id="sma-val">10,000 km</div>
+          </div>
+          <div class="viz-control">
+            <label>Inclination (°)</label>
+            <input type="range" id="inc-slider" min="0" max="90" step="1" value="28" oninput="updateOrbit()">
+            <div class="viz-value" id="inc-val">28°</div>
+          </div>
+          <div class="viz-control" style="margin-top:8px">
+            <div style="font-family:var(--font-mono);font-size:12px;color:var(--text-muted)">
+              Orbital Period: <span id="period-val" style="color:var(--accent-primary)">—</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <canvas id="orbit-canvas"></canvas>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== RESUME ===================== -->
+<section id="resume">
+  <div class="section-inner">
+    <div class="section-label">06 — Document</div>
+    <h2 class="section-title reveal">Curriculum<br><span class="dim">Vitae</span></h2>
+    <div class="resume-card reveal">
+      <div class="resume-icon">📄</div>
+      <h3>Pranav Rohan Tejomurtula</h3>
+      <p>Aerospace Engineering · The University of Texas at Austin · Graduating May 2027</p>
+      <div class="hero-buttons" style="justify-content:center">
+        <a class="btn-primary" href="PranavRohanTejomurtulaResume.docx" download>Download Resume (.docx)</a>
+        <a class="btn-outline" href="Pranav_Rohan_Tejomurtula_-_Engineering_Portfolio.pdf" download>Download Portfolio (.pdf)</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== CONTACT ===================== -->
+<section id="contact">
+  <div class="section-inner">
+    <div class="section-label">07 — Connect</div>
+    <h2 class="section-title">Let's Build<br><span class="dim">Something Great</span></h2>
+    <div class="contact-grid">
+      <div class="reveal">
+        <h3>Get in Touch</h3>
+        <p>I'm open to internship opportunities, research collaborations, and engineering discussions. Whether you're at SpaceX, Lockheed, Boeing, or an exciting startup — I'd love to connect.</p>
+        <div class="contact-links">
+          <a href="mailto:pranavrohantejomurtula@gmail.com" class="contact-link">
+            <span class="contact-link-icon">✉</span>
+            <div class="contact-link-text">
+              <div class="contact-link-label">Email</div>
+              <div class="contact-link-value">pranavrohantejomurtula@gmail.com</div>
+            </div>
+          </a>
+          <a href="https://linkedin.com/in/pranav-tejomurtula" target="_blank" class="contact-link">
+            <span class="contact-link-icon">in</span>
+            <div class="contact-link-text">
+              <div class="contact-link-label">LinkedIn</div>
+              <div class="contact-link-value">linkedin.com/in/pranav-tejomurtula</div>
+            </div>
+          </a>
+          <a href="tel:2107401311" class="contact-link">
+            <span class="contact-link-icon">📞</span>
+            <div class="contact-link-text">
+              <div class="contact-link-label">Phone</div>
+              <div class="contact-link-value">(210) 740-1311</div>
+            </div>
+          </a>
+        </div>
+      </div>
+      <div class="reveal reveal-delay-2">
+        <div class="contact-form">
+          <div class="form-group">
+            <label>Name</label>
+            <input type="text" id="form-name" placeholder="Your full name" />
+          </div>
+          <div class="form-group">
+            <label>Email</label>
+            <input type="email" id="form-email" placeholder="your@email.com" />
+          </div>
+          <div class="form-group">
+            <label>Message</label>
+            <textarea id="form-message" rows="5" placeholder="Tell me about an opportunity or project..."></textarea>
+          </div>
+          <button class="form-submit" onclick="submitForm()">Send Message</button>
+          <div class="form-success" id="form-success">✓ Message received! I'll get back to you soon.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">PRT — AEROSPACE ENGINEERING</div>
+  <div class="footer-copy">© 2026 <span>Pranav Rohan Tejomurtula</span> · UT Austin · Class of 2027</div>
+</footer>
+
+<script>
+/* =============================================
+   STAR FIELD
+============================================= */
+(function() {
+  const canvas = document.getElementById('star-canvas');
+  const ctx = canvas.getContext('2d');
+  let stars = [];
+  let W, H;
+
+  function resize() {
+    W = canvas.width = window.innerWidth;
+    H = canvas.height = window.innerHeight;
+  }
+  window.addEventListener('resize', resize);
+  resize();
+
+  // Generate stars
+  for (let i = 0; i < 280; i++) {
+    stars.push({
+      x: Math.random(),
+      y: Math.random(),
+      r: Math.random() * 1.5 + 0.2,
+      alpha: Math.random() * 0.6 + 0.1,
+      speed: Math.random() * 0.0002 + 0.00005,
+      twinkleSpeed: Math.random() * 0.02 + 0.005,
+      twinklePhase: Math.random() * Math.PI * 2
+    });
+  }
+
+  let t = 0;
+  function draw() {
+    ctx.clearRect(0, 0, W, H);
+    t += 0.016;
+    stars.forEach(s => {
+      const twinkle = s.alpha + Math.sin(t * s.twinkleSpeed * 60 + s.twinklePhase) * 0.15;
+      ctx.beginPath();
+      ctx.arc(s.x * W, s.y * H, s.r, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(180, 220, 255, ${Math.max(0, twinkle)})`;
+      ctx.fill();
+    });
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
+
+/* =============================================
+   PROJECT DATA
+============================================= */
+const projects = [
+  {
+    id: 'uav',
+    category: 'propulsion',
+    tag: 'Propulsion / UAV',
+    title: 'UAV Propulsion + Power Analysis',
+    desc: 'Analyzed 2+ hours of UAV flight data to identify optimal flight configurations, compute L/D ratios, and size electrical circuits for all onboard systems.',
+    tech: ['MATLAB', 'ArduPilot', 'Mission Planner', 'MotoCalc', 'Excel'],
+    visual: 'uav',
+    details: {
+      goal: 'Take UAV flight testing data and select the most optimal flight configurations using software and trend analysis. Calculate endurance capabilities and power draw from components to size 3 different electrical circuits.',
+      highlights: [
+        'Implemented Mission Planner and ArduPilot to extract relevant data and compute running averages.',
+        'Utilized MotoCalc, Excel, and MATLAB interpolation to process 2+ hours of flight testing data.',
+        'Identified best Lift Over Drag ratio and most efficient flight time at specific airspeeds.',
+        'Completed full UAV power analysis to determine battery selection for all electrical circuits.',
+        'Achieved 50% battery capacity increase with a concurrent 5% weight reduction.'
+      ],
+      team: 'FLARE-X Engineering Team · UT Austin'
+    }
+  },
+  {
+    id: 'fea',
+    category: 'structures',
+    tag: 'Structures / FEA',
+    title: 'FEA of a Hyperloop Frame',
+    desc: 'Ran static and extreme-loading FEA simulations on a custom Hyperloop frame, achieving a minimum FOS of 2 — meeting European Hyperloop Week competition standards.',
+    tech: ['SolidWorks', 'FEA', 'CAD', 'Structural Analysis'],
+    visual: 'fea',
+    details: {
+      goal: 'Run FEA simulations on a custom Hyperloop frame to analyze static and extreme loading scenarios. Output stress, displacement, and FOS plots for a comprehensive design review.',
+      highlights: [
+        'Set up and ran multiple finite element analyses to assess frame design and support beam placement.',
+        'Incorporated loading forces including weight, air springs, and Linear Induction Motors.',
+        'Surpassed the European Hyperloop Week minimum FOS requirement of 2.',
+        'Observed a displacement of only 2 mm under extreme loading — within design margins.',
+        'Modified designs by relocating beams and coordinating with other subteams.'
+      ],
+      team: 'Gaucho Hyperloop · UT Austin'
+    }
+  },
+  {
+    id: 'hypershell',
+    category: 'aero',
+    tag: 'Aerodynamics',
+    title: 'Aerodynamics of a Mounted Hyperloop Shell',
+    desc: 'Scaled down a 6 ft Hyperloop shell to fit an 8×8 in wind tunnel at Mach 7.2 / 180 psi. Used SLA/PLA 3D printing with dry sanding for surface perfection.',
+    tech: ['SolidWorks', 'Schlieren Imaging', 'SLA 3D Printing', 'FastCAM'],
+    visual: 'shell',
+    details: {
+      goal: 'Scale a 6 ft hyperloop shell to fit within an 8×8 in wind tunnel test section and observe interactions with a Mach 7.2 freestream without surface imperfections.',
+      highlights: [
+        'Accounted for test section area and camera FOV when sizing the model.',
+        'Iterated through multiple Resin and PLA print attempts to perfect the geometry.',
+        'Used dry sanding to optimize the model surface for Mach 7.2, 180 psi test conditions.',
+        'Successfully captured Schlieren imaging of the scaled model at hypersonic speeds.',
+        'Coordinated mounting configuration to maintain parallel orientation to the test section.'
+      ],
+      team: 'UTSA Hypersonics Lab · Gaucho Hyperloop'
+    }
+  },
+  {
+    id: 'pls',
+    category: 'experimental',
+    tag: 'Experimental / Hypersonics',
+    title: 'Planar Laser Scattering (PLS) Experiments',
+    desc: 'Led the first-ever PLS experiment at the UTSA Hypersonics Lab — developing CO₂ dry ice seeding methodology as an alternative to PIV for Mach 7.2 flow visualization.',
+    tech: ['Class 4 Laser', 'LabVIEW', 'ImageJ', 'Optical Systems', 'Thermodynamics'],
+    visual: 'laser',
+    details: {
+      goal: 'Successfully set up and run the first ever Planar Laser Scattering experiment at the UTSA Hypersonics Laboratory, developing an alternative seeding method for the Mach 7.2 freestream.',
+      highlights: [
+        'Calculated dry ice quantities based on mass flow, heat transfer, and pressure limits.',
+        'Set up a Class 4 laser, imaging approach, and wind tunnel diaphragm for 50 ms burst tests.',
+        'Used ImageJ software to post-process results and evaluate experiment effectiveness.',
+        'Developed methodology for CO₂ boundary layer seeding as an alternative to PIV.',
+        'Operated LabVIEW software controlling pressure and temperature conditions in the wind tunnel.'
+      ],
+      team: 'UTSA Hypersonics Laboratory'
+    }
+  },
+  {
+    id: 'brackets',
+    category: 'structures',
+    tag: 'Structures / CAD',
+    title: 'Hyperloop Frame L-Brackets',
+    desc: 'Designed custom L-bracket components to integrate the aeroshell with the Hyperloop frame, accounting for curved geometry, variable beam thicknesses, and magnetic levitation loads.',
+    tech: ['SolidWorks CAD', 'FEA', 'Additive Manufacturing', 'Structural Design'],
+    visual: 'brackets',
+    details: {
+      goal: 'Create integration components for the Hyperloop shell and frame, allowing easy removal while maintaining structural integrity during magnetic levitation.',
+      highlights: [
+        'Analyzed aeroshell curvature and bounded L-bracket dimensions accordingly.',
+        'Designed multiple bracket variants to accommodate varying frame beam thicknesses.',
+        'Extended brackets to maintain shell integration during magnetic levitation.',
+        'Validated approach with basic FEA and a built-in 1-inch soft material margin.',
+        'Used additive manufacturing for iterative prototyping and fit verification.'
+      ],
+      team: 'Gaucho Hyperloop · UT Austin'
+    }
+  },
+  {
+    id: 'pcb',
+    category: 'electronics',
+    tag: 'Electronics / R&D',
+    title: 'PCB for Thrust Vector Control System',
+    desc: 'Researched and designed a multi-iteration printed circuit board for a model rocket TVC system, incorporating IMU, servos, flash memory, and backup mechanisms.',
+    tech: ['Eagle PCB', 'Schematics', 'PCB Layout', 'R&D', 'Embedded Systems'],
+    visual: 'pcb',
+    details: {
+      goal: 'Research and design a PCB for a model rocket\'s Thrust Vector Control system accounting for sensors, actuators, backup mechanisms, and space constraints.',
+      highlights: [
+        'Compiled full component list (IMU, servos, flash chip, LED indicators, voltage control).',
+        'Converted component requirements into a detailed schematics layout with port locations.',
+        'Completed initial PCB layout and iterated based on ECE professor review.',
+        'Developed a double-sided PCB approach to reduce board size and component costs.',
+        'Reached a 4th iteration of the PCB design with significantly improved routing.'
+      ],
+      team: 'Longhorn Rocketry Association (LRA) · UT Austin'
+    }
+  },
+  {
+    id: 'cfd',
+    category: 'aero',
+    tag: 'Aerodynamics / CFD',
+    title: 'CFD Analysis of a Nozzle',
+    desc: 'Designed and simulated a converging nozzle with an internal sphere obstruction using SolidWorks CFD, generating pressure gradients and flow trajectory visualizations.',
+    tech: ['SolidWorks CFD', 'SolidWorks CAD', 'Fluid Dynamics', 'Flow Analysis'],
+    visual: 'cfd',
+    details: {
+      goal: 'Grasp CFD concepts on industrial objects. Design and run simulations through SolidWorks to achieve a better understanding of critical fluid engineering principles.',
+      highlights: [
+        'Designed a CAD model of a generic nozzle with a sphere obstruction in the inlet region.',
+        'Set up CFD simulations using inlet/outlet faces with the sphere as a freestream artifact.',
+        'Generated pressure gradient and flow trajectory visualizations from typical freestream velocities.',
+        'Modified geometry inputs to study the effect of nozzle sizing on flow behavior.',
+        'Developed intuition for flow separation, pressure recovery, and shock formation.'
+      ],
+      team: 'UT Austin Coursework / Independent'
+    }
+  }
+];
+
+/* =============================================
+   RENDER PROJECT CARDS
+============================================= */
+function getSvg(type) {
+  const svgs = {
+    uav: `<svg viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:200px;background:#060d18">
+      <defs><linearGradient id="g1" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" style="stop-color:#0066ff;stop-opacity:0.6"/><stop offset="100%" style="stop-color:#00d4ff;stop-opacity:0.6"/></linearGradient></defs>
+      <!-- Grid -->
+      <line x1="0" y1="50" x2="400" y2="50" stroke="rgba(0,212,255,0.06)" stroke-width="1"/>
+      <line x1="0" y1="100" x2="400" y2="100" stroke="rgba(0,212,255,0.06)" stroke-width="1"/>
+      <line x1="0" y1="150" x2="400" y2="150" stroke="rgba(0,212,255,0.06)" stroke-width="1"/>
+      <!-- L/D Curve 1 -->
+      <polyline points="40,40 80,38 120,42 160,52 200,68 240,90 280,118 320,150 360,175" fill="none" stroke="#00d4ff" stroke-width="2"/>
+      <!-- L/D Curve 2 -->
+      <polyline points="40,50 80,46 120,50 160,64 200,84 240,108 280,140 320,168 360,185" fill="none" stroke="#ff6b35" stroke-width="2"/>
+      <!-- Data points -->
+      <circle cx="80" cy="38" r="4" fill="#00d4ff"/><circle cx="160" cy="52" r="4" fill="#00d4ff"/>
+      <circle cx="240" cy="90" r="4" fill="#00d4ff"/><circle cx="320" cy="150" r="4" fill="#00d4ff"/>
+      <circle cx="80" cy="46" r="4" fill="#ff6b35"/><circle cx="240" cy="108" r="4" fill="#ff6b35"/>
+      <!-- Labels -->
+      <text x="10" y="195" fill="rgba(0,212,255,0.4)" font-family="JetBrains Mono" font-size="8">L/D vs Airspeed — Two Propeller Configurations</text>
+      <text x="350" y="35" fill="#00d4ff" font-family="JetBrains Mono" font-size="8">20x11E</text>
+      <text x="350" y="48" fill="#ff6b35" font-family="JetBrains Mono" font-size="8">20x13E</text>
+    </svg>`,
+
+    fea: `<svg viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:200px;background:#060d18">
+      <!-- Frame outline -->
+      <rect x="60" y="60" width="280" height="100" fill="none" stroke="rgba(0,212,255,0.2)" stroke-width="1"/>
+      <!-- Internal beams -->
+      <line x1="60" y1="60" x2="340" y2="60" stroke="rgba(0,102,255,0.6)" stroke-width="2"/>
+      <line x1="60" y1="160" x2="340" y2="160" stroke="rgba(0,102,255,0.6)" stroke-width="2"/>
+      <line x1="140" y1="60" x2="140" y2="160" stroke="rgba(0,212,255,0.4)" stroke-width="1.5"/>
+      <line x1="200" y1="60" x2="200" y2="160" stroke="rgba(0,212,255,0.4)" stroke-width="1.5"/>
+      <line x1="260" y1="60" x2="260" y2="160" stroke="rgba(0,212,255,0.4)" stroke-width="1.5"/>
+      <!-- Stress gradient nodes -->
+      <circle cx="140" cy="60" r="5" fill="#ff6b35" opacity="0.8"/>
+      <circle cx="200" cy="60" r="4" fill="#ffaa00" opacity="0.7"/>
+      <circle cx="260" cy="60" r="5" fill="#ff6b35" opacity="0.8"/>
+      <circle cx="60" cy="110" r="6" fill="#ff2244" opacity="0.9"/>
+      <circle cx="340" cy="110" r="6" fill="#ff2244" opacity="0.9"/>
+      <circle cx="200" cy="160" r="4" fill="#00ff88" opacity="0.8"/>
+      <!-- Force arrows -->
+      <line x1="100" y1="30" x2="100" y2="58" stroke="#ff6b35" stroke-width="1.5" marker-end="url(#arrow)"/>
+      <line x1="200" y1="20" x2="200" y2="58" stroke="#ff6b35" stroke-width="1.5"/>
+      <line x1="300" y1="30" x2="300" y2="58" stroke="#ff6b35" stroke-width="1.5"/>
+      <defs><marker id="arrow" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#ff6b35"/></marker></defs>
+      <text x="10" y="195" fill="rgba(0,212,255,0.4)" font-family="JetBrains Mono" font-size="8">SolidWorks FEA — Hyperloop Frame — Min FOS: 2.0 | Δ = 2mm</text>
+    </svg>`,
+
+    shell: `<svg viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:200px;background:#060d18">
+      <!-- Shell profile -->
+      <path d="M 60 100 Q 120 40 200 38 Q 280 40 340 100 Q 280 160 200 162 Q 120 160 60 100 Z" fill="none" stroke="rgba(0,212,255,0.4)" stroke-width="1.5"/>
+      <!-- Mach shock waves -->
+      <line x1="340" y1="100" x2="395" y2="60" stroke="rgba(255,107,53,0.5)" stroke-width="1.5" stroke-dasharray="4,3"/>
+      <line x1="340" y1="100" x2="395" y2="140" stroke="rgba(255,107,53,0.5)" stroke-width="1.5" stroke-dasharray="4,3"/>
+      <line x1="320" y1="100" x2="395" y2="50" stroke="rgba(255,107,53,0.3)" stroke-width="1" stroke-dasharray="4,3"/>
+      <line x1="320" y1="100" x2="395" y2="150" stroke="rgba(255,107,53,0.3)" stroke-width="1" stroke-dasharray="4,3"/>
+      <!-- Flow lines -->
+      <path d="M 10 80 Q 80 78 200 75 Q 280 73 360 88" fill="none" stroke="rgba(0,212,255,0.25)" stroke-width="1"/>
+      <path d="M 10 100 Q 60 95 65 100 Q 130 140 200 138 Q 270 137 340 100 Q 370 95 395 100" fill="none" stroke="rgba(0,212,255,0.25)" stroke-width="1"/>
+      <path d="M 10 120 Q 80 122 200 125 Q 280 127 360 112" fill="none" stroke="rgba(0,212,255,0.25)" stroke-width="1"/>
+      <!-- Mach label -->
+      <text x="360" y="30" fill="#ff6b35" font-family="JetBrains Mono" font-size="10" font-weight="bold">M∞ = 7.2</text>
+      <text x="10" y="195" fill="rgba(0,212,255,0.4)" font-family="JetBrains Mono" font-size="8">Schlieren Imaging Setup — Wind Tunnel 8×8in — 180 psi</text>
+    </svg>`,
+
+    laser: `<svg viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:200px;background:#060d18">
+      <!-- Wind tunnel outline -->
+      <rect x="100" y="60" width="200" height="80" fill="none" stroke="rgba(0,212,255,0.2)" stroke-width="1.5"/>
+      <!-- Laser beam -->
+      <line x1="10" y1="100" x2="100" y2="100" stroke="#ff4444" stroke-width="2"/>
+      <line x1="100" y1="60" x2="100" y2="140" stroke="#ff6666" stroke-width="2" stroke-dasharray="3,3"/>
+      <!-- Scattering particles -->
+      <circle cx="150" cy="90" r="2" fill="rgba(255,255,200,0.8)"/>
+      <circle cx="180" cy="95" r="2" fill="rgba(255,255,200,0.8)"/>
+      <circle cx="200" cy="85" r="2" fill="rgba(255,255,200,0.9)"/>
+      <circle cx="220" cy="100" r="2" fill="rgba(255,255,200,0.7)"/>
+      <circle cx="240" cy="92" r="2" fill="rgba(255,255,200,0.8)"/>
+      <circle cx="160" cy="110" r="2" fill="rgba(255,255,200,0.6)"/>
+      <circle cx="210" cy="115" r="2" fill="rgba(255,255,200,0.7)"/>
+      <!-- CO2 cloud effect -->
+      <ellipse cx="200" cy="100" rx="60" ry="25" fill="rgba(200,220,255,0.04)" stroke="rgba(0,212,255,0.1)" stroke-width="1"/>
+      <!-- Camera -->
+      <rect x="310" y="85" width="40" height="30" fill="none" stroke="rgba(0,212,255,0.4)" stroke-width="1.5"/>
+      <text x="312" y="103" fill="rgba(0,212,255,0.6)" font-family="JetBrains Mono" font-size="8">CAM</text>
+      <!-- Label -->
+      <text x="10" y="15" fill="#ff6666" font-family="JetBrains Mono" font-size="9">CLASS 4 LASER</text>
+      <text x="10" y="195" fill="rgba(0,212,255,0.4)" font-family="JetBrains Mono" font-size="8">PLS Setup — CO₂ Seeded Boundary Layer — Mach 7.2</text>
+    </svg>`,
+
+    brackets: `<svg viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:200px;background:#060d18">
+      <!-- Frame outline -->
+      <rect x="80" y="70" width="240" height="80" fill="none" stroke="rgba(0,212,255,0.3)" stroke-width="1.5"/>
+      <!-- Shell curve top -->
+      <path d="M 60 70 Q 200 20 340 70" fill="none" stroke="rgba(0,212,255,0.5)" stroke-width="1.5"/>
+      <!-- Brackets -->
+      <rect x="90" y="62" width="12" height="18" fill="rgba(0,212,255,0.15)" stroke="rgba(0,212,255,0.5)" stroke-width="1"/>
+      <rect x="140" y="62" width="12" height="18" fill="rgba(0,212,255,0.15)" stroke="rgba(0,212,255,0.5)" stroke-width="1"/>
+      <rect x="200" y="58" width="12" height="18" fill="rgba(255,107,53,0.15)" stroke="#ff6b35" stroke-width="1"/>
+      <rect x="260" y="62" width="12" height="18" fill="rgba(0,212,255,0.15)" stroke="rgba(0,212,255,0.5)" stroke-width="1"/>
+      <rect x="310" y="62" width="12" height="18" fill="rgba(0,212,255,0.15)" stroke="rgba(0,212,255,0.5)" stroke-width="1"/>
+      <!-- Internal frame members -->
+      <line x1="80" y1="110" x2="320" y2="110" stroke="rgba(0,212,255,0.2)" stroke-width="1"/>
+      <line x1="160" y1="70" x2="160" y2="150" stroke="rgba(0,212,255,0.2)" stroke-width="1"/>
+      <line x1="240" y1="70" x2="240" y2="150" stroke="rgba(0,212,255,0.2)" stroke-width="1"/>
+      <text x="10" y="195" fill="rgba(0,212,255,0.4)" font-family="JetBrains Mono" font-size="8">SolidWorks CAD — L-Bracket Integration — Magnetic Levitation Loads</text>
+    </svg>`,
+
+    pcb: `<svg viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:200px;background:#060d18">
+      <!-- PCB board -->
+      <rect x="60" y="30" width="280" height="140" fill="rgba(0,40,20,0.5)" stroke="rgba(0,212,100,0.4)" stroke-width="1.5" rx="4"/>
+      <!-- Traces -->
+      <polyline points="80,60 120,60 120,80 160,80" fill="none" stroke="rgba(255,100,100,0.5)" stroke-width="1.5"/>
+      <polyline points="80,120 140,120 140,100 200,100" fill="none" stroke="rgba(0,150,255,0.6)" stroke-width="1.5"/>
+      <polyline points="200,60 240,60 240,80 280,80 280,120 320,120" fill="none" stroke="rgba(255,100,100,0.5)" stroke-width="1.5"/>
+      <polyline points="160,80 160,140 240,140 240,120" fill="none" stroke="rgba(0,150,255,0.5)" stroke-width="1.5"/>
+      <!-- Components (ICs) -->
+      <rect x="80" y="48" width="28" height="24" fill="rgba(0,212,100,0.15)" stroke="rgba(0,212,100,0.5)" stroke-width="1"/>
+      <text x="87" y="63" fill="rgba(0,255,100,0.7)" font-family="JetBrains Mono" font-size="7">IMU</text>
+      <rect x="200" y="82" width="34" height="24" fill="rgba(0,212,100,0.15)" stroke="rgba(0,212,100,0.5)" stroke-width="1"/>
+      <text x="205" y="97" fill="rgba(0,255,100,0.7)" font-family="JetBrains Mono" font-size="7">MCU</text>
+      <rect x="260" y="48" width="40" height="24" fill="rgba(0,212,100,0.15)" stroke="rgba(0,212,100,0.5)" stroke-width="1"/>
+      <text x="264" y="63" fill="rgba(0,255,100,0.7)" font-family="JetBrains Mono" font-size="7">FLASH</text>
+      <!-- Connector pads -->
+      <rect x="80" y="150" width="8" height="8" fill="rgba(255,200,0,0.6)"/>
+      <rect x="92" y="150" width="8" height="8" fill="rgba(255,200,0,0.6)"/>
+      <rect x="104" y="150" width="8" height="8" fill="rgba(255,200,0,0.6)"/>
+      <rect x="116" y="150" width="8" height="8" fill="rgba(255,200,0,0.6)"/>
+      <text x="10" y="195" fill="rgba(0,212,255,0.4)" font-family="JetBrains Mono" font-size="8">Eagle PCB — TVC System — 4th Iteration — Double-Sided Design</text>
+    </svg>`,
+
+    cfd: `<svg viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:200px;background:#060d18">
+      <defs>
+        <linearGradient id="pressure" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%" style="stop-color:#0066ff;stop-opacity:0.8"/>
+          <stop offset="50%" style="stop-color:#00ff88;stop-opacity:0.8"/>
+          <stop offset="100%" style="stop-color:#ff4444;stop-opacity:0.8"/>
+        </linearGradient>
+      </defs>
+      <!-- Nozzle outline -->
+      <path d="M 40 60 L 140 80 L 140 90 L 200 88 L 260 80 L 360 60" fill="none" stroke="rgba(0,212,255,0.4)" stroke-width="1.5"/>
+      <path d="M 40 140 L 140 120 L 140 110 L 200 112 L 260 120 L 360 140" fill="none" stroke="rgba(0,212,255,0.4)" stroke-width="1.5"/>
+      <!-- Inner sphere -->
+      <circle cx="185" cy="100" r="14" fill="rgba(100,150,255,0.1)" stroke="rgba(0,212,255,0.6)" stroke-width="1.5"/>
+      <!-- Flow trajectories (colored by velocity) -->
+      <path d="M 40 80 Q 120 80 140 85 Q 160 90 175 88 Q 200 84 230 82 Q 280 80 360 80" fill="none" stroke="#ff4444" stroke-width="1.5" opacity="0.7"/>
+      <path d="M 40 100 Q 100 100 135 100 Q 150 100 165 95 Q 200 88 235 95 Q 270 100 360 100" fill="none" stroke="#ffaa00" stroke-width="1.5" opacity="0.7"/>
+      <path d="M 40 120 Q 120 118 140 115 Q 160 110 175 112 Q 200 116 230 118 Q 280 120 360 120" fill="none" stroke="#00d4ff" stroke-width="1.5" opacity="0.7"/>
+      <text x="10" y="195" fill="rgba(0,212,255,0.4)" font-family="JetBrains Mono" font-size="8">SolidWorks CFD — Nozzle Flow — Pressure + Velocity Visualization</text>
+      <!-- Colorbar -->
+      <rect x="30" y="15" width="100" height="6" fill="url(#pressure)" rx="2"/>
+      <text x="30" y="12" fill="rgba(0,102,255,0.8)" font-family="JetBrains Mono" font-size="7">LOW P</text>
+      <text x="108" y="12" fill="rgba(255,68,68,0.8)" font-family="JetBrains Mono" font-size="7">HIGH P</text>
+    </svg>`
+  };
+  return svgs[type] || svgs.cfd;
+}
+
+function renderProjects() {
+  const grid = document.getElementById('projects-grid');
+  grid.innerHTML = projects.map((p, i) => `
+    <div class="project-card reveal reveal-delay-${(i % 3) + 1}" data-cat="${p.category}" data-id="${p.id}" onclick="openModal('${p.id}')">
+      <div class="card-visual">
+        <div class="card-visual-inner">${getSvg(p.visual)}</div>
+      </div>
+      <div class="card-body">
+        <div class="card-tag">${p.tag}</div>
+        <div class="card-title">${p.title}</div>
+        <div class="card-desc">${p.desc}</div>
+        <div class="card-tech">${p.tech.map(t => `<span class="tech-tag">${t}</span>`).join('')}</div>
+        <div class="card-cta">View Details <span class="arrow">→</span></div>
+      </div>
+    </div>
+  `).join('');
+  // Re-trigger scroll reveal
+  observeElements();
+}
+
+/* =============================================
+   PROJECT FILTERING
+============================================= */
+document.addEventListener('DOMContentLoaded', () => {
+  document.getElementById('filter-bar').addEventListener('click', e => {
+    const btn = e.target.closest('.filter-btn');
+    if (!btn) return;
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    const filter = btn.dataset.filter;
+    document.querySelectorAll('.project-card').forEach(card => {
+      if (filter === 'all' || card.dataset.cat === filter) {
+        card.classList.remove('hidden');
+      } else {
+        card.classList.add('hidden');
+      }
+    });
+  });
+});
+
+/* =============================================
+   MODAL
+============================================= */
+function openModal(id) {
+  const p = projects.find(x => x.id === id);
+  if (!p) return;
+  document.getElementById('modal-tag').textContent = p.tag;
+  document.getElementById('modal-title').textContent = p.title;
+  document.getElementById('modal-body').innerHTML = `
+    <div class="modal-section">
+      <h4>Mission Objective</h4>
+      <p>${p.details.goal}</p>
+    </div>
+    <div class="modal-section">
+      <h4>Key Achievements</h4>
+      <ul>${p.details.highlights.map(h => `<li>${h}</li>`).join('')}</ul>
+    </div>
+    <div class="modal-section">
+      <h4>Technologies Used</h4>
+      <div class="card-tech">${p.tech.map(t => `<span class="tech-tag">${t}</span>`).join('')}</div>
+    </div>
+    <div class="modal-section">
+      <h4>Team / Affiliation</h4>
+      <p>${p.details.team}</p>
+    </div>
+  `;
+  document.getElementById('modal-overlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeModal(e) {
+  if (e.target === document.getElementById('modal-overlay')) closeModalDirect();
+}
+function closeModalDirect() {
+  document.getElementById('modal-overlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModalDirect(); });
+
+/* =============================================
+   SKILLS DATA
+============================================= */
+const skillBlocks = [
+  {
+    icon: '🖥️',
+    title: 'Programming',
+    skills: [
+      { name: 'MATLAB', pct: 85 },
+      { name: 'Python', pct: 70 },
+      { name: 'LabVIEW', pct: 65 },
+      { name: 'Excel / VBA', pct: 80 }
+    ]
+  },
+  {
+    icon: '🔩',
+    title: 'CAD & Design',
+    skills: [
+      { name: 'SolidWorks CAD', pct: 88 },
+      { name: 'Eagle PCB', pct: 70 },
+      { name: '3D Printing (SLA/FDM)', pct: 80 }
+    ]
+  },
+  {
+    icon: '⚙️',
+    title: 'Simulation',
+    skills: [
+      { name: 'SolidWorks FEA', pct: 82 },
+      { name: 'SolidWorks CFD', pct: 72 },
+      { name: 'MotoCalc', pct: 75 },
+      { name: 'ArduPilot / Mission Planner', pct: 80 }
+    ]
+  },
+  {
+    icon: '🔬',
+    title: 'Experimental',
+    skills: [
+      { name: 'Schlieren Imaging', pct: 75 },
+      { name: 'Laser Optics (Class 4)', pct: 65 },
+      { name: 'ImageJ Analysis', pct: 70 },
+      { name: 'Wind Tunnel Operations', pct: 78 }
+    ]
+  }
+];
+
+function renderSkills() {
+  document.getElementById('skills-grid').innerHTML = skillBlocks.map((block, bi) => `
+    <div class="skill-block reveal reveal-delay-${bi % 3 + 1}">
+      <div class="skill-block-icon">${block.icon}</div>
+      <div class="skill-block-title">${block.title}</div>
+      ${block.skills.map(s => `
+        <div class="skill-bar-item">
+          <div class="skill-bar-header">
+            <span class="skill-bar-name">${s.name}</span>
+            <span class="skill-bar-pct">${s.pct}%</span>
+          </div>
+          <div class="skill-bar-track">
+            <div class="skill-bar-fill" data-pct="${s.pct}"></div>
+          </div>
+        </div>
+      `).join('')}
+    </div>
+  `).join('');
+}
+
+/* =============================================
+   EXPERIENCE DATA
+============================================= */
+const experiences = [
+  {
+    date: '2024 – PRESENT',
+    role: 'Undergraduate Researcher',
+    org: 'UTSA <span>Hypersonics Laboratory</span>',
+    points: [
+      'Led first-ever Planar Laser Scattering (PLS) experiment at the UTSA Hypersonics Lab.',
+      'Developed CO₂ dry ice seeding methodology for Mach 7.2 flow visualization.',
+      'Designed and tested scaled Hyperloop shell models for hypersonic aerodynamics study.',
+      'Operated Class 4 laser systems and Schlieren imaging setups.',
+      'Used LabVIEW to control and monitor wind tunnel pressure and temperature conditions.'
+    ]
+  },
+  {
+    date: '2023 – PRESENT',
+    role: 'Structures / Aerodynamics Engineer',
+    org: 'Gaucho <span>Hyperloop · UT Austin</span>',
+    points: [
+      'Ran FEA of the Hyperloop frame for the European Hyperloop Week competition — surpassed FOS ≥ 2 requirement.',
+      'Designed L-bracket integration components for aeroshell-frame attachment under magnetic levitation loads.',
+      'Coordinated cross-subteam design modifications to resolve structural constraints.',
+      'Produced comprehensive stress, displacement, and FOS plots for competition documentation.'
+    ]
+  },
+  {
+    date: '2023 – 2024',
+    role: 'Propulsion & Power Systems Engineer',
+    org: 'FLARE-X <span>UAV Team · UT Austin</span>',
+    points: [
+      'Analyzed 2+ hours of UAV flight test data to identify optimal propulsion configurations.',
+      'Calculated endurance and power draw across 3 separate electrical circuits.',
+      'Selected optimal battery configuration — increased capacity 50% while reducing weight 5%.',
+      'Used MotoCalc, ArduPilot, and MATLAB to process and visualize flight performance trends.'
+    ]
+  },
+  {
+    date: '2023 – 2024',
+    role: 'PCB & Avionics Engineer',
+    org: 'Longhorn Rocketry <span>Association (LRA) · UT Austin</span>',
+    points: [
+      'Researched and designed PCB for Thrust Vector Control system through 4+ iterations.',
+      'Produced full schematics layout covering IMU, servos, flash memory, LED indicators, voltage control.',
+      'Evaluated double-sided PCB architecture to minimize board footprint and component costs.',
+      'Received design review from ECE faculty for validation and improvement.'
+    ]
+  }
+];
+
+function renderExperience() {
+  document.getElementById('timeline').innerHTML = experiences.map(e => `
+    <div class="timeline-item">
+      <div class="timeline-dot"></div>
+      <div class="timeline-date">${e.date}</div>
+      <div class="timeline-role">${e.role}</div>
+      <div class="timeline-org">${e.org}</div>
+      <ul class="timeline-points">${e.points.map(p => `<li>${p}</li>`).join('')}</ul>
+    </div>
+  `).join('');
+}
+
+/* =============================================
+   ORBIT CANVAS VISUALIZER
+============================================= */
+let orbitAnimFrame;
+function updateOrbit() {
+  const ecc = parseFloat(document.getElementById('ecc-slider').value);
+  const sma = parseFloat(document.getElementById('sma-slider').value);
+  const inc = parseFloat(document.getElementById('inc-slider').value);
+
+  document.getElementById('ecc-val').textContent = ecc.toFixed(2);
+  document.getElementById('sma-val').textContent = sma.toLocaleString() + ' km';
+  document.getElementById('inc-val').textContent = inc + '°';
+
+  // Kepler's 3rd law: T² = (4π²/μ) × a³, μ_Earth = 3.986e14 m³/s²
+  const a_m = sma * 1000;
+  const mu = 3.986e14;
+  const T_sec = 2 * Math.PI * Math.sqrt(Math.pow(a_m, 3) / mu);
+  const T_min = (T_sec / 60).toFixed(0);
+  document.getElementById('period-val').textContent = T_min > 1440
+    ? (T_min / 1440).toFixed(2) + ' days'
+    : T_min + ' min';
+
+  drawOrbit(ecc, inc);
+}
+
+function drawOrbit(ecc, inc) {
+  const canvas = document.getElementById('orbit-canvas');
+  const ctx = canvas.getContext('2d');
+  const W = canvas.width = canvas.offsetWidth;
+  const H = canvas.height = canvas.offsetHeight;
+
+  ctx.clearRect(0, 0, W, H);
+
+  const cx = W / 2, cy = H / 2;
+  const maxA = Math.min(W, H) * 0.42;
+  const a = maxA;
+  const c = a * ecc;
+  const b = a * Math.sqrt(1 - ecc * ecc);
+
+  // Earth
+  const earthR = 18;
+  const grad = ctx.createRadialGradient(cx - c, cy, 0, cx - c, cy, earthR);
+  grad.addColorStop(0, '#4499ff');
+  grad.addColorStop(0.6, '#2255bb');
+  grad.addColorStop(1, '#001133');
+  ctx.beginPath();
+  ctx.arc(cx - c, cy, earthR, 0, Math.PI * 2);
+  ctx.fillStyle = grad;
+  ctx.fill();
+
+  // Atmosphere glow
+  const atm = ctx.createRadialGradient(cx - c, cy, earthR, cx - c, cy, earthR + 12);
+  atm.addColorStop(0, 'rgba(100,180,255,0.15)');
+  atm.addColorStop(1, 'rgba(100,180,255,0)');
+  ctx.beginPath();
+  ctx.arc(cx - c, cy, earthR + 12, 0, Math.PI * 2);
+  ctx.fillStyle = atm;
+  ctx.fill();
+
+  // Inclination effect (squash y)
+  const incFactor = Math.cos(inc * Math.PI / 180);
+
+  // Orbit ellipse
+  ctx.save();
+  ctx.translate(cx, cy);
+  ctx.scale(1, incFactor);
+  ctx.beginPath();
+  ctx.ellipse(-c, 0, a, b, 0, 0, Math.PI * 2);
+  ctx.strokeStyle = 'rgba(0,212,255,0.3)';
+  ctx.lineWidth = 1.5;
+  ctx.setLineDash([6, 4]);
+  ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.restore();
+
+  // Animated satellite
+  const t = (Date.now() / 4000) % (Math.PI * 2);
+  const satX = cx + (a * Math.cos(t) - c);
+  const satY = cy + b * Math.sin(t) * incFactor;
+
+  // Satellite trail
+  ctx.save();
+  ctx.translate(cx, cy);
+  ctx.scale(1, incFactor);
+  for (let i = 1; i <= 40; i++) {
+    const trailT = t - (i * 0.06);
+    const tx = a * Math.cos(trailT) - c;
+    const ty = b * Math.sin(trailT);
+    ctx.beginPath();
+    ctx.arc(tx, ty, 2 * (1 - i / 40), 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(0,212,255,${(1 - i / 40) * 0.5})`;
+    ctx.fill();
+  }
+  ctx.restore();
+
+  // Satellite body
+  ctx.save();
+  ctx.translate(satX, satY);
+  ctx.fillStyle = '#00d4ff';
+  ctx.shadowColor = '#00d4ff';
+  ctx.shadowBlur = 12;
+  ctx.beginPath();
+  ctx.arc(0, 0, 5, 0, Math.PI * 2);
+  ctx.fill();
+  // Solar panels
+  ctx.fillStyle = 'rgba(0,212,255,0.7)';
+  ctx.fillRect(-16, -2, 10, 4);
+  ctx.fillRect(6, -2, 10, 4);
+  ctx.restore();
+
+  // Perigee / Apogee labels
+  ctx.font = '10px JetBrains Mono';
+  ctx.fillStyle = 'rgba(0,212,255,0.5)';
+  ctx.fillText('PERIAPSIS', cx + a - c + 8, cy * incFactor + cy + 14);
+  ctx.fillText('APOAPSIS', cx - a - c - 68, cy * incFactor + cy + 14);
+
+  // HUD overlay
+  ctx.font = '11px JetBrains Mono';
+  ctx.fillStyle = 'rgba(0,212,255,0.4)';
+  ctx.fillText('// KEPLER ORBIT MODEL', 12, 20);
+
+  cancelAnimationFrame(orbitAnimFrame);
+  orbitAnimFrame = requestAnimationFrame(() => {
+    const ecc2 = parseFloat(document.getElementById('ecc-slider').value);
+    const inc2 = parseFloat(document.getElementById('inc-slider').value);
+    drawOrbit(ecc2, inc2);
+  });
+}
+
+/* =============================================
+   CONTACT FORM
+============================================= */
+function submitForm() {
+  const name = document.getElementById('form-name').value.trim();
+  const email = document.getElementById('form-email').value.trim();
+  const msg = document.getElementById('form-message').value.trim();
+  if (!name || !email || !msg) { alert('Please fill in all fields.'); return; }
+  const success = document.getElementById('form-success');
+  success.style.display = 'block';
+  document.getElementById('form-name').value = '';
+  document.getElementById('form-email').value = '';
+  document.getElementById('form-message').value = '';
+  setTimeout(() => success.style.display = 'none', 5000);
+}
+
+/* =============================================
+   SCROLL REVEAL OBSERVER
+============================================= */
+function observeElements() {
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        // Animate skill bars
+        entry.target.querySelectorAll('.skill-bar-fill').forEach(bar => {
+          bar.style.width = bar.dataset.pct + '%';
+        });
+        // Animate timeline items
+        if (entry.target.classList.contains('timeline-item')) {
+          entry.target.classList.add('visible');
+        }
+      }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+
+  document.querySelectorAll('.reveal, .timeline-item').forEach(el => observer.observe(el));
+}
+
+/* =============================================
+   MOBILE MENU
+============================================= */
+function toggleMobileMenu() {
+  // Simple scroll to top
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+/* =============================================
+   INIT
+============================================= */
+document.addEventListener('DOMContentLoaded', () => {
+  renderProjects();
+  renderSkills();
+  renderExperience();
+  observeElements();
+  updateOrbit();
+
+  // Navbar scroll effect
+  window.addEventListener('scroll', () => {
+    const nav = document.getElementById('navbar');
+    if (window.scrollY > 60) {
+      nav.style.padding = '12px 48px';
+    } else {
+      nav.style.padding = '18px 48px';
+    }
+  });
+});
+</script>
+</body>
+</html>
